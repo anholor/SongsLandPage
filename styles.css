@@ -1,0 +1,507 @@
+/* === БАЗОВІ СТИЛІ === */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'inter', monospace;
+    background: #000;
+    color: #fff;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Кастомний курсор - тільки на десктопі */
+@media (pointer: fine) {
+    * {
+        cursor: none;
+    }
+    
+    .cursor {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #fff;
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9999;
+        transition: all 0.1s ease;
+        mix-blend-mode: difference;
+    }
+
+    .cursor-trail {
+        width: 8px;
+        height: 8px;
+        background: #fff;
+        border-radius: 50%;
+        position: fixed;
+        pointer-events: none;
+        z-index: 9998;
+        opacity: 0.5;
+        mix-blend-mode: difference;
+    }
+}
+
+/* На мобільних пристроях - звичайний курсор */
+@media (pointer: coarse) {
+    .cursor,
+    .cursor-trail {
+        display: none;
+    }
+}
+
+/* === АНІМАЦІЇ === */
+@keyframes consume {
+    0% { 
+        box-shadow: 0 0 20px rgba(0,0,0,0.8),
+                    inset 0 0 20px rgba(0,0,0,0.8);
+    }
+    50% { 
+        box-shadow: 0 0 40px rgba(50,0,50,0.6),
+                    inset 0 0 40px rgba(50,0,50,0.6);
+    }
+    100% { 
+        box-shadow: 0 0 20px rgba(0,0,0,0.8),
+                    inset 0 0 20px rgba(0,0,0,0.8);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes glitch {
+    0% { transform: translate(0); }
+    20% { transform: translate(-2px, 2px); }
+    40% { transform: translate(-2px, -2px); }
+    60% { transform: translate(2px, 2px); }
+    80% { transform: translate(2px, -2px); }
+    100% { transform: translate(0); }
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0) translateX(0); }
+    25% { transform: translateY(-100px) translateX(50px); }
+    50% { transform: translateY(-200px) translateX(-50px); }
+    75% { transform: translateY(-100px) translateX(100px); }
+}
+
+@keyframes rotate {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* === ФОНОВІ ЕФЕКТИ === */
+.background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle at center, #1a0033 0%, #000 100%);
+    z-index: -1;
+}
+
+.void-particles {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+.particle {
+    position: absolute;
+    background: rgba(100, 0, 100, 0.3);
+    border-radius: 50%;
+    animation: float 15s infinite;
+}
+
+/* === ЗАГОЛОВОК === */
+header {
+    text-align: center;
+    padding: 80px 20px 40px;
+    position: relative;
+}
+
+h1 {
+    font-size: 4rem;
+    letter-spacing: 10px;
+    text-transform: uppercase;
+    background: linear-gradient(45deg, #fff, #888, #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: glitch 3s infinite;
+    text-shadow: 0 0 30px rgba(255,255,255,0.3);
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 1.2rem;
+    color: #888;
+    margin-top: 20px;
+    letter-spacing: 5px;
+}
+
+/* === КОНТЕЙНЕР ПІСЕНЬ === */
+.songs-container {
+    max-width: 100%;
+    margin: 60px auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+/* === КАРТОЧКИ ПІСЕНЬ === */
+.song-card {
+    background: linear-gradient(135deg, rgba(20,0,40,0.8), rgba(0,0,0,0.9));
+    border: none;
+    border-bottom: 1px solid rgba(100,0,100,0.3);
+    border-radius: 0;
+    padding: 40px 60px;
+    position: relative;
+    overflow: hidden;
+    opacity: 0;
+    animation: fadeInUp 0.8s forwards, consume 4s infinite;
+    transition: all 0.5s ease;
+    width: 100%;
+}
+
+.song-card:first-child {
+    border-top: 1px solid rgba(100,0,100,0.3);
+}
+
+.song-card:nth-child(1) { animation-delay: 0.1s; }
+.song-card:nth-child(2) { animation-delay: 0.2s; }
+.song-card:nth-child(3) { animation-delay: 0.3s; }
+.song-card:nth-child(4) { animation-delay: 0.4s; }
+
+.song-card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(100,0,100,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+/* Hover ефекти тільки на десктопі */
+@media (hover: hover) {
+    .song-card:hover::before {
+        opacity: 1;
+        animation: rotate 8s linear infinite;
+    }
+
+    .song-card:hover {
+        background: linear-gradient(135deg, rgba(30,0,60,0.9), rgba(10,0,20,0.95));
+        border-color: rgba(150,0,150,0.6);
+        box-shadow: inset 0 0 50px rgba(100,0,100,0.3);
+    }
+
+    .song-lyric:hover {
+        text-shadow: 0 0 20px rgba(255,255,255,0.8);
+        transform: translateX(10px);
+    }
+}
+
+.song-lyric {
+    font-size: 2rem;
+    color: #fff;
+    margin-bottom: 20px;
+    font-style: italic;
+    letter-spacing: 1px;
+    position: relative;
+    z-index: 1;
+    line-height: 1.4;
+    font-weight: 300;
+    transition: all 0.3s ease;
+}
+
+.song-artist {
+    font-size: 1.1rem;
+    color: #888;
+    margin-bottom: 25px;
+    letter-spacing: 2px;
+    position: relative;
+    z-index: 1;
+    text-transform: uppercase;
+}
+
+.audio-player {
+    width: 100%;
+    max-width: 600px;
+    margin: 25px 0;
+    position: relative;
+    z-index: 1;
+    filter: invert(1) hue-rotate(180deg);
+    border-radius: 5px;
+}
+
+.song-description {
+    font-size: 0.95rem;
+    line-height: 1.7;
+    color: #999;
+    margin-top: 25px;
+    position: relative;
+    z-index: 1;
+    border-left: 3px solid rgba(100,0,100,0.5);
+    padding-left: 20px;
+    max-width: 800px;
+}
+
+/* === ФУТЕР === */
+footer {
+    text-align: center;
+    padding: 40px 20px;
+    color: #555;
+    font-size: 0.9rem;
+    letter-spacing: 2px;
+}
+
+/* ========================================
+   АДАПТАЦІЯ ПІД РІЗНІ ПРИСТРОЇ
+======================================== */
+
+/* Планшети (768px - 1024px) */
+@media screen and (max-width: 1024px) {
+    header {
+        padding: 60px 15px 30px;
+    }
+
+    h1 {
+        font-size: 3rem;
+        letter-spacing: 5px;
+    }
+
+    .subtitle {
+        font-size: 1rem;
+        letter-spacing: 3px;
+    }
+
+    .songs-container {
+        margin: 40px auto;
+    }
+
+    .song-card {
+        padding: 35px 40px;
+    }
+
+    .song-lyric {
+        font-size: 1.7rem;
+    }
+}
+
+/* Мобільні пристрої (до 768px) */
+@media screen and (max-width: 768px) {
+    header {
+        padding: 50px 15px 25px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+        letter-spacing: 3px;
+        word-wrap: break-word;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+        letter-spacing: 2px;
+        margin-top: 15px;
+    }
+
+    .songs-container {
+        margin: 30px auto;
+    }
+
+    .song-card {
+        padding: 30px 25px;
+    }
+
+    .song-lyric {
+        font-size: 1.4rem;
+        margin-bottom: 15px;
+    }
+
+    .song-artist {
+        font-size: 0.9rem;
+        letter-spacing: 1px;
+        margin-bottom: 20px;
+    }
+
+    .audio-player {
+        margin: 20px 0;
+    }
+
+    .song-description {
+        font-size: 0.85rem;
+        line-height: 1.5;
+        padding-left: 15px;
+        margin-top: 20px;
+    }
+
+    footer {
+        padding: 30px 15px;
+        font-size: 0.8rem;
+    }
+
+    /* Зменшення частинок на мобільних */
+    .particle {
+        opacity: 0.5;
+    }
+}
+
+/* Малі мобільні пристрої (до 480px) */
+@media screen and (max-width: 480px) {
+    header {
+        padding: 40px 10px 20px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+        letter-spacing: 2px;
+    }
+
+    .subtitle {
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+    }
+
+    .songs-container {
+        margin: 20px auto;
+    }
+
+    .song-card {
+        padding: 25px 20px;
+    }
+
+    .song-lyric {
+        font-size: 1.2rem;
+    }
+
+    .song-artist {
+        font-size: 0.85rem;
+    }
+
+    .song-description {
+        font-size: 0.8rem;
+        padding-left: 12px;
+    }
+
+    footer {
+        padding: 25px 10px;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+    }
+
+    /* Вимикаємо складні анімації на слабких пристроях */
+    .song-card {
+        animation: fadeInUp 0.5s forwards;
+    }
+}
+
+/* Дуже малі екрани (до 360px) */
+@media screen and (max-width: 360px) {
+    h1 {
+        font-size: 1.5rem;
+        letter-spacing: 1px;
+    }
+
+    .subtitle {
+        font-size: 0.75rem;
+    }
+
+    .song-card {
+        padding: 20px 15px;
+    }
+
+    .song-lyric {
+        font-size: 1.1rem;
+    }
+
+    .song-artist {
+        font-size: 0.8rem;
+    }
+
+    .song-description {
+        font-size: 0.75rem;
+    }
+}
+
+/* Landscape орієнтація на мобільних */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+    header {
+        padding: 30px 15px 20px;
+    }
+
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    .songs-container {
+        margin: 20px auto;
+    }
+
+    .song-card {
+        padding: 20px 30px;
+    }
+}
+
+/* Оптимізація для торкань на мобільних */
+@media (pointer: coarse) {
+    .song-card {
+        -webkit-tap-highlight-color: rgba(100, 0, 100, 0.2);
+        touch-action: manipulation;
+    }
+
+    .audio-player {
+        min-height: 44px; /* Мінімальний розмір для комфортного торкання */
+    }
+
+    /* Активний стан при торканні */
+    .song-card:active {
+        background: linear-gradient(135deg, rgba(30,0,60,0.9), rgba(10,0,20,0.95));
+        border-color: rgba(150,0,150,0.6);
+    }
+}
+
+/* Висока роздільна здатність (Retina) */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+    .song-title,
+    h1 {
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+}
+
+/* Темна тема (системна) */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: #000;
+    }
+}
+
+/* Зменшена анімація для тих, хто вимкнув рух */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
